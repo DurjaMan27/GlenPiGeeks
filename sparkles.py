@@ -9,9 +9,9 @@ while True:
     x = randint(0, 7)
     y = randint(0, 7)
         #RGB Color Scale (0-255)
-    r = 0
-    g = 0
-    b = 0
+    r = randint(0,0)
+    g = randint(0,0)
+    b = randint(0,0)
     sense.set_pixel(x, y, r, g, b)
     sleep(0.1)
 
