@@ -38,6 +38,7 @@ def sendemail():
         recepient = [receiver.get()]
         sub = subject.get()
         pswrd = password.get()
+        msgcontent = msgbody.get()
         # instance of MIMEMultipart
         msg = MIMEMultipart()
 
@@ -59,8 +60,9 @@ def sendemail():
         msg['To'] = str(recepient)
 
         # attach the body with the msg instance 
-        msg.attach(MIMEText(str(sub), 'plain'))
-
+        msg.attach(MIMEText(str(msgcontent), 'plain'))
+        print(msgcontent)
+        #print(msg.as_string())
         #6 Insert the picture file
         # open the file to be sent  
         filename = "yourpicture.jpg"
@@ -83,7 +85,7 @@ def sendemail():
         # Converts the Multipart msg into a string 
         text = msg.as_string()           
 
-        print(text)
+        #print(text)
         #send the email
         s.sendmail(sender,recepient, text)
 
@@ -146,8 +148,8 @@ subject_entry = ttk.Entry(mainframe, width=30, textvariable=subject)
 subject_entry.grid(column=4, row=6, sticky=(W, E))
 
 ttk.Label(mainframe, text="Message Body: ").grid(column=0, row=7, sticky=W)
-msgbody = Text(mainframe, width=30, height=10)
-msgbody.grid(column=4, row=7, sticky=(W, E))
+msgbody_entry = ttk.Entry(mainframe, width=30, textvariable=msgbody)
+msgbody_entry.grid(column=4, row=7, sticky=(W, E))
 
 ttk.Button(mainframe, text="Send Email", command=sendemail).grid(column=4,row=9,sticky=E)
 
