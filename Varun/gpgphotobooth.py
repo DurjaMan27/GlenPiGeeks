@@ -27,6 +27,8 @@ def CameraOFF():
     camera.stop_preview()
     
 def CameraTakePic():
+    camera.annotate_text = "Happy Diwali from the Glen Pi Geeks!"
+    #camera.annotate_text_size = 120
     camera.capture('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.jpg')
     
 def EXIT():
@@ -43,7 +45,7 @@ def sendemail():
         sender = "glenpigeeks@gmail.com"
         recepient = [receiver.get()]
         #sub = subject.get()
-        sub = "Hellow from Glen Pi Geeks!"
+        sub = "Hello from Glen Pi Geeks!"
         #pswrd = password.get()
         pswrd = "WarringtonGlen18976"
         #msgcontent = msgbody.get()
