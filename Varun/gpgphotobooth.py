@@ -21,6 +21,7 @@ def CameraON():
     camera.preview_fullscreen=False
     camera.preview_window=(90,100, 320, 240)
     camera.resolution=(640,480)
+    #camera.brightness = 60
     camera.start_preview()
     
 def CameraOFF():
@@ -115,7 +116,7 @@ def setup(event):
     
         
 root = Tk()
-root.title("Glen Pi Geeks Photobooth!!")
+root.title("GPG Photobooth!!")
 
 mainframe = ttk.Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
