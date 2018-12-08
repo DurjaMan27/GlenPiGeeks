@@ -7,17 +7,17 @@ This script uses the Vision API's label detection capabilities to find a label
 based on an image's content.
 
 """
-
+from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
 import argparse
 import base64
 import picamera
 import json
 import os
 
-from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/pi/GoogleCloudEval-6d8f37a01a0a.json"
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/pi/GoogleCloudEval-e422de340b3a.json"
 
 def takephoto():
     camera = picamera.PiCamera()

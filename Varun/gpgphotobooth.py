@@ -99,13 +99,33 @@ def sendemail():
 
         #print(text)
         #send the email
-        s.sendmail(sender,recepient, text)
-
-        #we are done
-        rslt=s.quit()
-        print('Sendmail result=' + str(rslt[1]))
-        
-        ttk.Label(mainframe, text="Email sent successfully").grid(column=0,row=8)
+        try:
+            s.sendmail(sender,recepient, text)
+        except SMTPRecipientsRefused:
+            ttk.Label(mainframe, text="Email Recipients refused. Please try again with a proper email address.").grid(column=0,row=8)
+            print("email recipients refused")
+        except SMTPResponseException:
+            ttk.Label(mainframe, text="Email Response Exception. Please try again with a proper email address.").grid(column=0,row=8)
+            print("email response exception")
+        except SMTPSenderRefused:
+            ttk.Label(mainframe, text="Email Sender Refused. Please try again with a proper email address.").grid(column=0,row=8)
+            print("email sender refused")
+        except SMTPConnectError:
+            ttk.Label(mainframe, text="Email Connect Error. Please try again with a proper email address.").grid(column=0,row=8)
+            print("email connect error")
+        except SMTPDataError:
+            print("data error")
+        except Exception as e:
+            print(str(e))
+        else: 
+            #we are done
+            rslt=s.quit()
+            print('Sendmail result=' + str(rslt[1]))
+            ttk.Label(mainframe, text="Email sent successfully").grid(column=0,row=8)
+            print("quit email")
+        #finally: 
+        #    ttk.Label(mainframe, text="Email not valid. Please try again with a proper email address.").grid(column=0,row=8)
+        #    print("finally")
 
     except Exception as e:
         #ttk.Label(mainframe, text=str(e)).grid(column=4,row=9,sticky=W)
