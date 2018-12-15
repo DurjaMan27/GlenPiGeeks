@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+from PIL import ImageTk
+from PIL import Image
 import picamera
 from time import sleep
 import subprocess
@@ -9,6 +11,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 from email.mime.base import MIMEBase 
 from email import encoders
+from google.cloud.vision import types
+from PIL import ImageDraw
 
 # explain what these imports do
 import argparse
@@ -18,6 +22,11 @@ import os
 
 # explain what this environment variable does
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/pi/GoogleCloudEval-e422de340b3a.json"
+
+root = Tk()
+root.title("GPG Photobooth 2.0!!")
+img = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png")
+#img1 = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
 
 camera = picamera.PiCamera()
 
@@ -47,7 +56,7 @@ def detect_faces(path):
     for face in faces:
         detection = 'anger: {}'.format(likelihood_name[face.anger_likelihood])
         detection = detection + 'joy: {}'.format(likelihood_name[face.joy_likelihood])
-        
+        detection = detection + detection + 'surprise: {}'.format(likelihood_name[face.surprise_likelihood])
         print('anger: {}'.format(likelihood_name[face.anger_likelihood]))
         print('joy: {}'.format(likelihood_name[face.joy_likelihood]))
         print('surprise: {}'.format(likelihood_name[face.surprise_likelihood]))
@@ -56,10 +65,56 @@ def detect_faces(path):
                     for vertex in face.bounding_poly.vertices])
 
         print('face bounds: {}'.format(','.join(vertices)))
-        ttk.Label(mainframe, text=detection).grid(column=0,row=8)
+        ttk.Label(mainframe, text=detection).grid(column=0,row=9)
+        
+    return faces
 
     # [END vision_python_migration_face_detection]
 # [END vision_face_detection]
+
+# [START vision_face_detection_tutorial_send_request]
+def detect_face(face_file, max_results=4):
+    from google.cloud import vision
+
+    """Uses the Vision API to detect faces in the given file.
+
+    Args:
+        face_file: A file-like object containing an image with faces.
+
+    Returns:
+        An array of Face objects with information about the picture.
+    """
+    # [START vision_face_detection_tutorial_client]
+    client = vision.ImageAnnotatorClient()
+    # [END vision_face_detection_tutorial_client]
+
+    content = face_file.read()
+    image = types.Image(content=content)
+
+    return client.face_detection(image=image).face_annotations
+# [END vision_face_detection_tutorial_send_request]
+
+# [START vision_face_detection_tutorial_process_response]
+def highlight_faces(image, faces, output_filename):
+    """Draws a polygon around the faces, then saves to output_filename.
+
+    Args:
+      image: a file containing the image with the faces.
+      faces: a list of faces found in the file. This should be in the format
+          returned by the Vision API.
+      output_filename: the name of the image file to be created, where the
+          faces have polygons drawn around them.
+    """
+    im = Image.open(image)
+    draw = ImageDraw.Draw(im)
+
+    for face in faces:
+        box = [(vertex.x, vertex.y)
+               for vertex in face.bounding_poly.vertices]
+        draw.line(box + [box[0]], width=5, fill='#00ff00')
+
+    im.save(output_filename)
+# [END vision_face_detection_tutorial_process_response]
 
 def toggleKeyboard(entry_widget_1):
     p = subprocess.Popen(['florence show'], shell=True, stdout= subprocess.PIPE, stderr= subprocess.PIPE, universal_newlines=True)
@@ -78,10 +133,32 @@ def CameraOFF():
     
 def CameraTakePic():
     camera.annotate_text = "Welcome to Glen Pi Geeks Photo Booth 2.0 - Make a Face!"
-    camera.capture('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.jpg')
+    camera.capture('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
+    top = Toplevel()
+    top.title('Your Image')
+    top.wm_geometry("640x480")
+    optimized_canvas = Canvas(top)
+    optimized_canvas.pack(fill=BOTH, expand=1)
+    optimized_canvas.create_image(0,0,anchor=NW, image=img)                        
     
 def AnalyzePic():
-    detect_faces('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.jpg')
+    detect_faces('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
+    with open('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png', 'rb') as image:
+        faces = detect_face(image, 4)
+        print('Found {} face{}'.format(
+            len(faces), '' if len(faces) == 1 else 's'))
+
+        print('Writing to file {}'.format('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png'))
+        # Reset the file pointer, so we can read the file again
+        image.seek(0)
+        highlight_faces(image, faces, '/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png')
+    #top = Toplevel()
+    #top.title('Your Image Analyzed')
+    #top.wm_geometry("640x480")
+    #optimized_canvas = Canvas(top)
+    #optimized_canvas.pack(fill=BOTH, expand=1)
+    #img1 = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
+    #optimized_canvas.create_image(0,0,anchor=NW, image=img1)     
     
 def EXIT():
     root.destroy
@@ -171,7 +248,7 @@ def sendemail():
             #we are done
             rslt=s.quit()
             print('Sendmail result=' + str(rslt[1]))
-            ttk.Label(mainframe, text="Email sent successfully").grid(column=0,row=8)
+            ttk.Label(mainframe, text="Email sent successfully").grid(column=0,row=9)
             print("quit email")
         #finally: 
         #    ttk.Label(mainframe, text="Email not valid. Please try again with a proper email address.").grid(column=0,row=8)
@@ -185,8 +262,6 @@ def setup(event):
     webbrowser.open_new(r"https://www.google.com/settings/security/lesssecureapps")
     
         
-root = Tk()
-root.title("GPG Photobooth 2.0!!")
 
 mainframe = ttk.Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
