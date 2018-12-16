@@ -53,10 +53,11 @@ def detect_faces(path):
                        'LIKELY', 'VERY_LIKELY')
     print('Faces:')
 
+    detection = "faces:"
     for face in faces:
-        detection = 'anger: {}'.format(likelihood_name[face.anger_likelihood])
-        detection = detection + 'joy: {}'.format(likelihood_name[face.joy_likelihood])
-        detection = detection + detection + 'surprise: {}'.format(likelihood_name[face.surprise_likelihood])
+        detection = detection + '\n anger: {}'.format(likelihood_name[face.anger_likelihood])
+        detection = detection + '\n joy: {}'.format(likelihood_name[face.joy_likelihood])
+        detection = detection + '\n surprise: {}'.format(likelihood_name[face.surprise_likelihood])
         print('anger: {}'.format(likelihood_name[face.anger_likelihood]))
         print('joy: {}'.format(likelihood_name[face.joy_likelihood]))
         print('surprise: {}'.format(likelihood_name[face.surprise_likelihood]))
@@ -132,7 +133,7 @@ def CameraOFF():
     camera.stop_preview()
     
 def CameraTakePic():
-    camera.annotate_text = "Welcome to Glen Pi Geeks Photo Booth 2.0 - Make a Face!"
+    #camera.annotate_text = "Welcome to Glen Pi Geeks Photo Booth 2.0 - Make a Face!"
     camera.capture('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
     top = Toplevel()
     top.title('Your Image')
