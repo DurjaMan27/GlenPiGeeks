@@ -25,8 +25,6 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/pi/GoogleCloudEval-e422de340
 
 root = Tk()
 root.title("GPG Photobooth 2.0!!")
-img = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png")
-#img1 = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
 
 camera = picamera.PiCamera()
 
@@ -136,12 +134,16 @@ def CameraTakePic():
     #camera.annotate_text = "Welcome to Glen Pi Geeks Photo Booth 2.0 - Make a Face!"
     camera.capture('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
     top = Toplevel()
-    top.title('Your Image')
+    top.title('Your Image Captured')
     top.wm_geometry("640x480")
     optimized_canvas = Canvas(top)
     optimized_canvas.pack(fill=BOTH, expand=1)
-    optimized_canvas.create_image(0,0,anchor=NW, image=img)                        
-    
+    load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png")
+    render = ImageTk.PhotoImage(load)
+    img = Label(top, image=render)
+    img.image = render
+    img.place(x=0, y=0)
+        
 def AnalyzePic():
     detect_faces('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
     with open('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png', 'rb') as image:
@@ -153,13 +155,17 @@ def AnalyzePic():
         # Reset the file pointer, so we can read the file again
         image.seek(0)
         highlight_faces(image, faces, '/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png')
-    #top = Toplevel()
-    #top.title('Your Image Analyzed')
-    #top.wm_geometry("640x480")
-    #optimized_canvas = Canvas(top)
-    #optimized_canvas.pack(fill=BOTH, expand=1)
-    #img1 = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
-    #optimized_canvas.create_image(0,0,anchor=NW, image=img1)     
+    top = Toplevel()
+    top.title('Your Image Analyzed')
+    top.wm_geometry("640x480")
+    optimized_canvas = Canvas(top)
+    optimized_canvas.pack(fill=BOTH, expand=1)
+    load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
+    render = ImageTk.PhotoImage(load)
+    # labels can be text or images
+    img = Label(top, image=render)
+    img.image = render
+    img.place(x=0, y=0)
     
 def EXIT():
     root.destroy
@@ -261,8 +267,7 @@ def sendemail():
 
 def setup(event):
     webbrowser.open_new(r"https://www.google.com/settings/security/lesssecureapps")
-    
-        
+
 
 mainframe = ttk.Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
