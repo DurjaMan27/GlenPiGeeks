@@ -51,8 +51,29 @@ def detect_faces(path):
                        'LIKELY', 'VERY_LIKELY')
     print('Faces:')
 
+    
     detection = "faces:"
     for face in faces:
+        print(type(face))
+        #print(face.anger_likelihood)
+        print(likelihood_name[face.anger_likelihood])
+        print(face.sorrow_likelihood)
+        print(face.joy_likelihood)
+        print(face.surprise_likelihood)
+        print(face.under_exposed_likelihood)
+        print(face.blurred_likelihood)
+        print(face.headwear_likelihood)
+        if (likelihood_name[face.joy_likelihood]) == 'VERY_LIKELY':
+            ShowEmotion("joy")
+        elif (likelihood_name[face.anger_likelihood]) == 'VERY_LIKELY':
+            ShowEmotion("anger")
+        elif (likelihood_name[face.sorrow_likelihood]) == 'VERY_LIKELY':
+            ShowEmotion("sorrow")
+        elif (likelihood_name[face.surprise_likelihood]) == 'VERY_LIKELY':
+            ShowEmotion("surprise")
+        elif (likelihood_name[face.blurred_likelihood]) == 'VERY_LIKELY':
+            ShowEmotion("blurred")
+            #print("Yikers! We can't see your face! Please remove any facial jawns or change your face? Just kidding.")
         detection = detection + '\n anger: {}'.format(likelihood_name[face.anger_likelihood])
         detection = detection + '\n joy: {}'.format(likelihood_name[face.joy_likelihood])
         detection = detection + '\n surprise: {}'.format(likelihood_name[face.surprise_likelihood])
@@ -143,7 +164,27 @@ def CameraTakePic():
     img = Label(top, image=render)
     img.image = render
     img.place(x=0, y=0)
-        
+
+def ShowEmotion(emotion):
+    top = Toplevel()
+    top.title('Your Image Analyzed')
+    top.wm_geometry("640x480")
+    optimized_canvas = Canvas(top)
+    optimized_canvas.pack(fill=BOTH, expand=1)
+    if emotion == "joy":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/joy.png")
+    elif emotion == "anger":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/anger.png")
+    elif emotion == "sorrow":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/sorrow.png")
+    elif emotion == "headwear":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/headwear.png")
+    render = ImageTk.PhotoImage(load)
+    # labels can be text or images
+    img = Label(top, image=render)
+    img.image = render
+    img.place(x=0, y=0)
+    
 def AnalyzePic():
     detect_faces('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
     with open('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png', 'rb') as image:
