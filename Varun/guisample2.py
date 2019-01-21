@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/usr/bin/python3
+=======
+#!/usr/bin/python
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
 # use a Tkinter label as a panel/frame with a background image
 # note that Tkinter only reads gif and ppm images

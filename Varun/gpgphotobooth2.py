@@ -25,8 +25,11 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/pi/GoogleCloudEval-e422de340
 
 root = Tk()
 root.title("GPG Photobooth 2.0!!")
+<<<<<<< HEAD
 img = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png")
 #img1 = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
+=======
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
 camera = picamera.PiCamera()
 
@@ -53,6 +56,7 @@ def detect_faces(path):
                        'LIKELY', 'VERY_LIKELY')
     print('Faces:')
 
+<<<<<<< HEAD
     detection = "faces:"
     for face in faces:
         detection = detection + '\n anger: {}'.format(likelihood_name[face.anger_likelihood])
@@ -61,12 +65,48 @@ def detect_faces(path):
         print('anger: {}'.format(likelihood_name[face.anger_likelihood]))
         print('joy: {}'.format(likelihood_name[face.joy_likelihood]))
         print('surprise: {}'.format(likelihood_name[face.surprise_likelihood]))
+=======
+    
+    detection = "faces:"
+    for face in faces:
+        print(type(face))
+        #print(face.anger_likelihood)
+        print(likelihood_name[face.anger_likelihood])
+        print(face.sorrow_likelihood)
+        print(face.joy_likelihood)
+        print(face.surprise_likelihood)
+        print(face.under_exposed_likelihood)
+        print(face.blurred_likelihood)
+        print(face.headwear_likelihood)
+        if (likelihood_name[face.joy_likelihood]) == 'VERY_LIKELY' or  (likelihood_name[face.joy_likelihood]) == 'LIKELY':
+            ShowEmotion("joy")
+        elif (likelihood_name[face.joy_likelihood]) == 'POSSIBLE' :
+            ShowEmotion("question")
+        elif (likelihood_name[face.anger_likelihood]) == 'VERY_LIKELY' or (likelihood_name[face.anger_likelihood]) == 'LIKELY':
+            ShowEmotion("anger")
+        elif (likelihood_name[face.sorrow_likelihood]) == 'VERY_LIKELY' or (likelihood_name[face.sorrow_likelihood]) == 'LIKELY':
+            ShowEmotion("sorrow")
+        elif (likelihood_name[face.surprise_likelihood]) == 'VERY_LIKELY' or (likelihood_name[face.surprise_likelihood]) == 'LIKELY':
+            ShowEmotion("surprise")
+        elif (likelihood_name[face.blurred_likelihood]) == 'VERY_LIKELY' or (likelihood_name[face.blurred_likelihood]) == 'LIKELY':
+            ShowEmotion("blurred")
+        print('anger: {}'.format(likelihood_name[face.anger_likelihood]))
+        print('joy: {}'.format(likelihood_name[face.joy_likelihood]))
+        print('surprise: {}'.format(likelihood_name[face.surprise_likelihood]))
+        print('sorrow: {}'.format(likelihood_name[face.sorrow_likelihood]))
+        print('blurred: {}'.format(likelihood_name[face.blurred_likelihood]))
+        
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
         vertices = (['({},{})'.format(vertex.x, vertex.y)
                     for vertex in face.bounding_poly.vertices])
 
         print('face bounds: {}'.format(','.join(vertices)))
+<<<<<<< HEAD
         ttk.Label(mainframe, text=detection).grid(column=0,row=9)
+=======
+        #ttk.Label(mainframe, text=detection).grid(column=0,row=9)
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
         
     return faces
 
@@ -76,6 +116,7 @@ def detect_faces(path):
 # [START vision_face_detection_tutorial_send_request]
 def detect_face(face_file, max_results=4):
     from google.cloud import vision
+<<<<<<< HEAD
 
     """Uses the Vision API to detect faces in the given file.
 
@@ -88,6 +129,9 @@ def detect_face(face_file, max_results=4):
     # [START vision_face_detection_tutorial_client]
     client = vision.ImageAnnotatorClient()
     # [END vision_face_detection_tutorial_client]
+=======
+    client = vision.ImageAnnotatorClient()
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
     content = face_file.read()
     image = types.Image(content=content)
@@ -95,6 +139,7 @@ def detect_face(face_file, max_results=4):
     return client.face_detection(image=image).face_annotations
 # [END vision_face_detection_tutorial_send_request]
 
+<<<<<<< HEAD
 # [START vision_face_detection_tutorial_process_response]
 def highlight_faces(image, faces, output_filename):
     """Draws a polygon around the faces, then saves to output_filename.
@@ -106,6 +151,9 @@ def highlight_faces(image, faces, output_filename):
       output_filename: the name of the image file to be created, where the
           faces have polygons drawn around them.
     """
+=======
+def highlight_faces(image, faces, output_filename):
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
     im = Image.open(image)
     draw = ImageDraw.Draw(im)
 
@@ -115,7 +163,10 @@ def highlight_faces(image, faces, output_filename):
         draw.line(box + [box[0]], width=5, fill='#00ff00')
 
     im.save(output_filename)
+<<<<<<< HEAD
 # [END vision_face_detection_tutorial_process_response]
+=======
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
 def toggleKeyboard(entry_widget_1):
     p = subprocess.Popen(['florence show'], shell=True, stdout= subprocess.PIPE, stderr= subprocess.PIPE, universal_newlines=True)
@@ -125,7 +176,11 @@ def toggleKeyboard(entry_widget_1):
 def CameraON():
     camera.preview_fullscreen=False
     camera.preview_window=(90,100, 320, 240)
+<<<<<<< HEAD
     camera.resolution=(640,480)
+=======
+    camera.resolution=(640,640)
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
     #camera.brightness = 60
     camera.start_preview()
     
@@ -135,12 +190,42 @@ def CameraOFF():
 def CameraTakePic():
     #camera.annotate_text = "Welcome to Glen Pi Geeks Photo Booth 2.0 - Make a Face!"
     camera.capture('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
+<<<<<<< HEAD
     top = Toplevel()
     top.title('Your Image')
     top.wm_geometry("640x480")
     optimized_canvas = Canvas(top)
     optimized_canvas.pack(fill=BOTH, expand=1)
     optimized_canvas.create_image(0,0,anchor=NW, image=img)                        
+=======
+    load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png")
+    load = load.resize((160, 160), Image.ANTIALIAS)
+    render = ImageTk.PhotoImage(load)
+    mainframe.display = Label(mainframe,image=render)
+    mainframe.display.image = render
+    mainframe.display.grid(row=5, column=0)
+
+def ShowEmotion(emotion):
+    if emotion == "joy":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/joy.png")
+    elif emotion == "anger":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/anger.png")
+    elif emotion == "sorrow":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/sorrow.jpg")
+    elif emotion == "headwear":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/headwear.png")
+    elif emotion == "surprise":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/surprise.png")
+    elif emotion == "question":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/question.jpg")
+        ttk.Label(mainframe, text="Hmm...we can't detect your emotion, wanna try again?").grid(column=2,row=6)
+    load = load.resize((160, 160), Image.ANTIALIAS)
+    render = ImageTk.PhotoImage(load)
+    # labels can be text or images
+    mainframe.display = Label(mainframe,image=render)
+    mainframe.display.image = render
+    mainframe.display.grid(row=5, column=2)
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
     
 def AnalyzePic():
     detect_faces('/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png')
@@ -153,6 +238,7 @@ def AnalyzePic():
         # Reset the file pointer, so we can read the file again
         image.seek(0)
         highlight_faces(image, faces, '/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png')
+<<<<<<< HEAD
     #top = Toplevel()
     #top.title('Your Image Analyzed')
     #top.wm_geometry("640x480")
@@ -160,6 +246,14 @@ def AnalyzePic():
     #optimized_canvas.pack(fill=BOTH, expand=1)
     #img1 = PhotoImage(file="/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
     #optimized_canvas.create_image(0,0,anchor=NW, image=img1)     
+=======
+    load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image1.png")
+    load = load.resize((160, 160), Image.ANTIALIAS) 
+    render = ImageTk.PhotoImage(load)
+    mainframe.display = Label(mainframe,image=render)
+    mainframe.display.image = render
+    mainframe.display.grid(row=5, column=1)
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
     
 def EXIT():
     root.destroy
@@ -206,7 +300,11 @@ def sendemail():
         #6 Insert the picture file
         # open the file to be sent  
         filename = "yourpicture.jpg"
+<<<<<<< HEAD
         attachment = open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.jpg", "rb")
+=======
+        attachment = open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/image.png", "rb")
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
         # instance of MIMEBase and named as p 
         p = MIMEBase('application', 'octet-stream')
@@ -249,6 +347,7 @@ def sendemail():
             #we are done
             rslt=s.quit()
             print('Sendmail result=' + str(rslt[1]))
+<<<<<<< HEAD
             ttk.Label(mainframe, text="Email sent successfully").grid(column=0,row=9)
             print("quit email")
         #finally: 
@@ -257,19 +356,33 @@ def sendemail():
 
     except Exception as e:
         #ttk.Label(mainframe, text=str(e)).grid(column=4,row=9,sticky=W)
+=======
+            ttk.Label(mainframe, text="Email sent successfully").grid(column=0,row=6)
+            print("quit email")
+    except Exception as e:
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
         print(str(e))
 
 def setup(event):
     webbrowser.open_new(r"https://www.google.com/settings/security/lesssecureapps")
+<<<<<<< HEAD
     
         
+=======
+
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
 mainframe = ttk.Frame(root, padding="3 3 12 12")
 mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
 mainframe.columnconfigure(0, weight=1)
 mainframe.rowconfigure(0, weight=1)
+<<<<<<< HEAD
 mainframe.grid(row=5, column=1, columnspan=2)
 mainframe.grid(row=6, column=1, columnspan=2)
+=======
+mainframe.grid(row=5, column=1, columnspan=3)
+mainframe.grid(row=6, column=1, columnspan=3)
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
 account = StringVar()
 password = StringVar()
@@ -279,6 +392,7 @@ msgbody = StringVar()
 
 ttk.Label(mainframe, text="Recepient's Email Account: ").grid(column=0, row=1, sticky=W)
 receiver_entry = ttk.Entry(mainframe, width=30, textvariable=receiver)
+<<<<<<< HEAD
 #receiver_entry.bind('<FocusIn>',toggleKeyboard)
 receiver_entry.grid(column=0, row=2, sticky=(W, E))
 
@@ -288,6 +402,16 @@ ttk.Button(mainframe, text='Exit Program', command=EXIT).grid(row=5, column = 0)
 ttk.Button(mainframe, text='Take Picture', command=CameraTakePic).grid(row=6, column = 0)
 ttk.Button(mainframe, text='Analyze Picture', command=AnalyzePic).grid(row=7, column = 0)
 ttk.Button(mainframe, text="Send Email", command=sendemail).grid(column=0,row=8)
+=======
+receiver_entry.grid(column=1, row=1, sticky=(W, E))
+
+ttk.Button(mainframe, text='Start Camera', command=CameraON).grid(row=3, column = 0)
+ttk.Button(mainframe, text='Kill Camera', command=CameraOFF).grid(row=4, column = 0)
+ttk.Button(mainframe, text='Take Picture', command=CameraTakePic).grid(row=3, column = 1)
+ttk.Button(mainframe, text='Analyze Picture', command=AnalyzePic).grid(row=4, column = 1)
+ttk.Button(mainframe, text="Send Email", command=sendemail).grid(row=3, column=2)
+ttk.Button(mainframe, text='Exit Program', command=EXIT).grid(row=4, column = 2)
+>>>>>>> e0c4455041cedcc91122560f9ab1e4670d5e3a21
 
 
 for child in mainframe.winfo_children(): child.grid_configure(padx=5, pady=5)
