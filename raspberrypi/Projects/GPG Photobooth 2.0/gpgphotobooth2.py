@@ -58,6 +58,9 @@ def detect_faces(path):
 
 <<<<<<< HEAD
     detection = "faces:"
+    print(len(faces))
+    if len(faces) > 1:
+        print("multiple faces")
     for face in faces:
         detection = detection + '\n anger: {}'.format(likelihood_name[face.anger_likelihood])
         detection = detection + '\n joy: {}'.format(likelihood_name[face.joy_likelihood])
