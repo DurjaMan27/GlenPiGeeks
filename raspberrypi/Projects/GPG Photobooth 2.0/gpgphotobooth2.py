@@ -81,7 +81,9 @@ def detect_faces(path):
         print(face.under_exposed_likelihood)
         print(face.blurred_likelihood)
         print(face.headwear_likelihood)
-        if (likelihood_name[face.joy_likelihood]) == 'VERY_LIKELY' or  (likelihood_name[face.joy_likelihood]) == 'LIKELY':
+        if len(faces) > 1:
+            ShowEmotion("multiplepeople")
+        elif (likelihood_name[face.joy_likelihood]) == 'VERY_LIKELY' or  (likelihood_name[face.joy_likelihood]) == 'LIKELY':
             ShowEmotion("joy")
         elif (likelihood_name[face.joy_likelihood]) == 'POSSIBLE' :
             ShowEmotion("question")
@@ -209,7 +211,9 @@ def CameraTakePic():
     mainframe.display.grid(row=5, column=0)
 
 def ShowEmotion(emotion):
-    if emotion == "joy":
+    if emotion == "multiplepeople":
+        load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/multiplepeople.png")
+    elif emotion == "joy":
         load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/joy.png")
     elif emotion == "anger":
         load = Image.open("/home/pi/GlenPiGeeks/PiPhotoBoothPictures/anger.png")

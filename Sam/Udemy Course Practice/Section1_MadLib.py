@@ -1,5 +1,0 @@
-adjective = input('Please enter an adjective: ')
-noun = input('Please enter a noun: ')
-verb = input('Please enter a verb ending in -ed:')
-print ('Your MadLib:')
-print ('The', adjective, noun, verb, 'the football when you went in the classroom.')
