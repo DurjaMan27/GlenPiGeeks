@@ -4,23 +4,34 @@ import boto3
 from boto3.dynamodb.conditions import Key, Attr
 import json
 import decimal
+import ntpath
 
 dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
-s3 = boto3.resource('s3', 'us-east-1')
+s3 = boto3.client('s3')
 client=boto3.client('rekognition', 'us-east-1')
 referenceLookupImage = '/home/ec2-user/environment/GlenPiGeeks/raspberrypi/Projects/upload_file_python/src/referenceimages/referenceimage.jpg'
 
 #Person takes live picture
 #Guard uploads picture to AWS
-filename=input('Enter File Name')
+filepath=input('Enter File Name')
 
-print(filename)    
+print(filepath)    
 # replace bucket, collectionId, and photo with your values.
-bucket='gpgphotobooth30'
+bucket='gpgphotoboothliveimages'
 collectionId='GlenPiGeeks'
     
 table = dynamodb.Table('gpgphotobooth3')
 
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
+    
+print(filepath)
+filename=path_leaf(filepath)
+print(filename)
+
+s3.upload_file(filepath, bucket, filename)
+ 
 #For live faces
 indexfacesresponse=client.index_faces(CollectionId=collectionId,
                                 Image={'S3Object':{'Bucket':bucket,'Name':filename}},
@@ -59,12 +70,6 @@ for faceRecord in indexfacesresponse['FaceRecords']:
                 str(item['ReferenceImageID'])
                 s3.Bucket(bucket).download_file(item['ReferenceImageID'], referenceLookupImage)
                 
-print('Faces not indexed:')
-for unindexedFace in indexfacesresponse['UnindexedFaces']:
-        print(' Location: {}'.format(unindexedFace['FaceDetail']['BoundingBox']))
-        print(' Reasons:')
-        for reason in unindexedFace['Reasons']:
-            print('   ' + reason)
 
     
 

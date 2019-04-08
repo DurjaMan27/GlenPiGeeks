@@ -2,7 +2,7 @@ import boto3
 
 # Create an S3 client
 s3 = boto3.client('s3', 'us-east-1')
-bucket_name = 'gpgphotobooth30'
+bucket_name = 'gpgphotoboothliveimages'
 
 def upload_image(filename, fullname):
 	file = open(filename,'rb')
@@ -19,4 +19,3 @@ fullname=input('Enter Full Name')
 # Uploads the given file using a managed uploader, which will split up large
 # files automatically and upload parts in parallel.
 upload_image(filename, fullname)
- 

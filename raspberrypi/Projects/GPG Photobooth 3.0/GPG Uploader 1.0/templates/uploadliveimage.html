@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+
+<body>
+<table style="width: 100%;">
+    <tbody>
+        <tr>
+            <td style="width: 100%; text-align: center;">Glen Pi Geeks Photobooth 3.0</td>
+        </tr>
+    </tbody>
+</table>
+<p><br></p>
+<table style="width: 100%;">
+    <tbody>
+        <tr>
+            <td style="width: 33.3333%; text-align: center;">Upload Live Picture!</td>
+        </tr>
+        <tr>
+            <td style="width: 33.3333%; text-align: center;">
+                <form   style="width: 33.3333%; text-align: center;" 
+                        action="{{ url_for('upload') }}" 
+                        enctype="multipart/form-data" 
+                        id="upload-form" method="POST">
+                        <input  id="file-picker" 
+                                type="file" 
+                                name="file" 
+                                accept="image/*" 
+                                multiple="" 
+                                value="">
+                        <div style="width: 33.3333%; text-align: center;" id="msg">
+					    <br>
+					    </div>
+					    <input style=" text-align: center;" type="submit" value="Upload!" id="upload-button" >
+				</form>
+            </td>
+            <td style="width: 33.3333%;"><br></td>
+            <td style="width: 33.3333%;"><br></td>
+        </tr>
+        <tr>
+            <td><br></td>
+            <td><br></td>
+            <td><br></td>
+        </tr>
+    </tbody>
+</table>
+</body>
+<script>
+
+    $("#file-picker").change(function(){
+
+        var input = document.getElementById('file-picker');
+
+        for (var i=0; i<input.files.length; i++)
+        {
+        //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
+            var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
+
+            if ((ext == 'jpg') || (ext == 'png'))
+            {
+                $("#msg").text("Files are supported")
+            }
+            else
+            {
+                $("#msg").text("Files are NOT supported")
+                document.getElementById("file-picker").value ="";
+            }
+
+        }
+
+
+    } );
+
+</script>
+</html>
