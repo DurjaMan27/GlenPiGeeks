@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+</head>
+<body>
+<table style="width: 100%;">
+    <tbody>
+        <tr>
+            <td style="width: 50%; text-align: left;"><h1>Glen Pi Geeks Photobooth 3.0</h1></td>
+        </tr>
+    </tbody>
+</table>
+<div class="container">
+    <div class="row">
+        <table>
+        <td style="height: 150 width: 150; text-align: left;">
+              <img class="img-responsive" height="150" width="150" src=" {{url_for('send_image', filename=live_image_names[0])}}">
+         </td>
+         <td style="height: 150 width: 150; text-align: center;">
+             <h2 text-align: center;>
+                 Match Found!
+             </h2>
+         </td>
+         <td style="height: 150 width: 150; text-align: center;">
+              <img class="img-responsive" height="150" width="150" src=" {{url_for('send_image', filename=live_image_names[1])}}">
+         </td>
+        </table>  
+    </div>
+</div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
